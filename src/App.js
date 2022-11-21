@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header/Header";
+import {Route, Routes} from "react-router-dom";
+import withRouter from "./hoc/withRouter";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// Pages
+import About from "./pages/about";
+import Catalog from "./pages/catalog";
+import Contacts from "./pages/contacts";
+import Home from "./pages/home";
+import Login from "./pages/login";
+
+// Component 404
+import NotFound from "./components/NotFound/NotFound";
+import {useEffect} from "react";
+
+function App(props) {
+    const goToHome = () => {
+        props.router.navigate('/')
+    }
+
+    const isLoginPage = () => props.router.location.pathname.includes('login')
+
+    useEffect(() => {
+        console.log(props.router.location.pathname.includes('login'))
+    }, [])
+
+    return (
+        <>
+            {isLoginPage() ? null : <Header goToHome={goToHome}/>}
+            <Routes>
+                <Route path="*" element={<NotFound/>}/>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/about" element={<About/>}/>
+                <Route path="/catalog" element={<Catalog/>}/>
+                <Route path="/contacts" element={<Contacts/>}/>
+                <Route path="/login" element={<Login/>}/>
+
+                {/*Admin routes*/}
+            </Routes>
+        </>
+    );
 }
 
-export default App;
+export default withRouter(App);
